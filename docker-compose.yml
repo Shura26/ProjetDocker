@@ -40,8 +40,8 @@ services:
       - ./laravel:/var/www/html
     depends_on:
       - mysql
-    links:
-      - mysql
+
+
       
   php2:
     build: ./php-dockerfile
@@ -49,7 +49,6 @@ services:
       - ./laravel:/var/www/html
     depends_on:
       - mysql
-    links:
-      - mysql
+
 
 
