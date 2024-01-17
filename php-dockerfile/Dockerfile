@@ -22,9 +22,11 @@ RUN docker-php-ext-install pdo_mysql
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+
 WORKDIR /var/www/html
 
 RUN composer update && composer install && npm install
 CMD cd /var/www/html && npm run build && php artisan key:generate && php artisan migrate:fresh --seed && php-fpm
 #EXPOSE 80 3306
 EXPOSE 9000
+

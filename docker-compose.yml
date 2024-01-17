@@ -1,38 +1,6 @@
-version: '3'
-
+version: "3"
 services:
-#-----------------------------------------------------------------
-  nginx1:
-    image: nginx:latest
-    volumes:
-      - ./nginx1.conf:/etc/nginx/conf.d/nginx1.conf
-      - ./laravel:/usr/share/nginx/html
-    ports:
-      - "8080:80"
 
-  php1:
-    build: .
-    volumes:
-      - ./laravel:/var/www/html
-    depends_on:
-      - mysql
-
-#-----------------------------------------------------------------
-  nginx2:
-    image: nginx:latest
-    volumes:
-      - ./nginx2.conf:/etc/nginx/conf.d/nginx2.conf
-      - ./laravel:/usr/share/nginx/html
-    ports:
-      - "8081:80"
-
-  php2:
-    build: .
-    volumes:
-      - ./laravel:/var/www/html
-    depends_on:
-      - mysql
-#-----------------------------------------------------------------
   mysql:
     image: mysql:latest
     environment:
@@ -40,3 +8,44 @@ services:
       MYSQL_DATABASE: mabase
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+
+  nginx1:
+    image: nginx:latest
+    ports:
+      - "8081:80"
+    volumes:
+      - ./laravel/public:/usr/share/nginx/html
+      - ./nginx1.conf:/etc/nginx/conf.d/nginx1.conf
+    depends_on:
+      - mysql
+      - php1
+
+  nginx2:
+    image: nginx:latest
+    ports:
+      - "8082:80"
+    volumes:
+      - ./laravel/public:/usr/share/nginx/html
+      - ./nginx2.conf:/etc/nginx/conf.d/nginx2.conf
+    depends_on:
+      - mysql
+      - php2
+
+  php1:
+    build: ./php-dockerfile
+    volumes:
+      - ./laravel:/var/www/html
+    depends_on:
+      - mysql
+
+
+  php2:
+    build: ./php-dockerfile
+    volumes:
+      - ./laravel:/var/www/html
+    depends_on:
+      - mysql
+      - php1
+
+
+
