@@ -1,0 +1,26 @@
+FROM php:8.2-fpm
+
+
+COPY laravel /var/www/html/
+
+RUN apt-get update && apt-get install -y \
+    npm \
+    nodejs\
+    git \
+    curl \
+    zip \
+    unzip 
+
+RUN docker-php-ext-install pdo_mysql
+
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+WORKDIR /var/www/html
+
+RUN composer update && composer install && npm install
+CMD cd /var/www/html && npm run build && php artisan key:generate && php artisan migrate:fresh --seed 
+
+EXPOSE 9000
+
