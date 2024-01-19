@@ -5,11 +5,7 @@ COPY laravel /var/www/html/
 
 RUN apt-get update && apt-get install -y \
     npm \
-    nodejs\
-    git \
-    curl \
-    zip \
-    unzip 
+    nodejs
 
 RUN docker-php-ext-install pdo_mysql
 
